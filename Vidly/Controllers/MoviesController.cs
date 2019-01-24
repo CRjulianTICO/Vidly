@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Vidly.Models;
+using Vidly.ViewModels;
 
 namespace Vidly.Controllers
 {
@@ -12,8 +13,21 @@ namespace Vidly.Controllers
         // GET: Movies
         public ActionResult Random()
         {
+            //De esta forma se incia un objeto y se le agrega por asi decirlo a la variable
+            var customers = new List<Customer> {
+                new Customer{ Name = "Customer 1"},
+                new Customer { Name = "Customer 2"}
+            };
+
             var movie = new Movie() { Name = "Sherk!" };
-            return View(movie);
+
+            var viewModel = new RandomMovieViewModel { Movie = movie, Customers = customers};
+
+
+            return View(viewModel);
+            //return View(movie);
+            /*ViewData["Movie"] = movie;
+            return View();*/
             // return Content("Hola Mundo!");
             // return HttpNotFound();
             // return new EmptyResult();
@@ -42,7 +56,8 @@ namespace Vidly.Controllers
             return Content(String.Format("Page Index is = {0} & sortBy is = {1}", pageIndex,sortBy));
         }
 
-
+        //Atributos de Routing
+        [Route("movies/release/{year}/{month:regex(\\d{2}):range(1,12)}")]
         public ActionResult ByReleaseDate(Int32 year, Int32 month)
         {
             return Content(year + "/" + month);
